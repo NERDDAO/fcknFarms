@@ -4,50 +4,28 @@ import { handle } from 'frog/next'
 import { devtools } from 'frog/dev'
 import { serveStatic } from 'frog/serve-static'
 import { Haikipu, hAIku } from "../middleware/openAi/royCall"
+import { inngest } from "../../../inngest/client"; // Import our client
+
+// Opt out of caching; every request should send a new event
+export const dynamic = "force-dynamic";
 
 type State = {
     id: string,
     haikipu: Haikipu
 }
-const aiMiddleWare = async (c: any, next: any) => {
 
-
-    await next()
-    console.log(c)
-    const { inputText, frameData, deriveState } = c;
-
-    const userPrompt = `"subject: ${inputText}"`
-
-    const haikipu: Haikipu = {
-        title: inputText || '',
-        id: frameData?.messageHash.toString() || '',
-        address: frameData?.address || '',
-        timestamp: Date.now().toString(),
-        type: "frame",
-        contextSummary: "You write haikus and weave them coherently",
-        haiku: "",
-        explainer: "",
-    };
-
-    await hAIku(haikipu, systemPrompt, assistantPrompt, userPrompt)
-}
 
 const app = new Frog<{ State: State }>({
     basePath: '/api',
     initialState: { id: '', haikipu: {} }
 })
 
-const systemPrompt = "Write a haiku about a the subject respond in a JSON format with the following structure: {haiku: string, haikuExplainer:string}"
-
-const assistantPrompt = "Haiku, unrhymed poetic form consisting of 17 syllables arranged in three lines of 5, 7, and 5 syllables respectively"
-
 // Frame to capture user's favorite fruit.
-app.frame('/', (c) => {
+app.frame('/', async (c) => {
     const { deriveState, frameData } = c
     const state = deriveState(previousState => {
         previousState.id = frameData?.messageHash.toString() || ''
     })
-
     return c.res({
         action: '/submit',
         image: (
@@ -64,13 +42,22 @@ app.frame('/', (c) => {
 })
 
 // Frame to display user's response.
-app.frame('/submit', aiMiddleWare, (c) => {
+app.frame('/submit', async (c) => {
     const { deriveState, frameData, buttonValue, status, inputText } = c;
-
-    const userPrompt = `Subject: ${inputText}`
     const state = deriveState(previousState => {
         previousState
     })
+    const userPrompt = `Subject: ${inputText}`
+    await inngest.send({
+        name: "test/hello.world",
+        data: {
+            id: state.id,
+            prompt: userPrompt,
+        },
+    });
+
+
+
 
     return c.res({
         image: (
@@ -100,7 +87,7 @@ app.frame('/render', async (c) => {
     return c.res({
         image: (
             <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
-
+                <span>query Id: {state.id}</span>
                 <br /> <span> Title: {state.haikipu?.haiku || "no haiku"}</span>
             </div>
         ),
