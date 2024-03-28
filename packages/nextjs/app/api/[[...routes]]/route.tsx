@@ -79,7 +79,7 @@ app.frame('/submit', async (c) => {
 app.frame('/render', async (c) => {
     const { deriveState } = c;
     const state = await deriveState(async previousState => {
-        const haiku = await fetch(`http://localhost:3000/api/mongo/haiku?id=${previousState.id}`)
+        const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${previousState.id}`)
         const hk = await haiku.json()
         console.log(hk)
         previousState.haikipu = hk[0] && hk[0].haikipu
