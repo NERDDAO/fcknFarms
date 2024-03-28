@@ -3,34 +3,21 @@ import { Button, Frog, TextInput } from 'frog'
 import { handle } from 'frog/next'
 import { devtools } from 'frog/dev'
 import { serveStatic } from 'frog/serve-static'
-import { Haikipu, hAIku, someVar } from "../middleware/openAi/royCall"
-const app = new Frog({
-    basePath: '/api',
-})
+import { Haikipu, hAIku } from "../middleware/openAi/royCall"
 
-const systemPrompt = "Write a haiku about a the subject"
+type State = {
+    id: string,
+    haikipu: Haikipu
+}
+const aiMiddleWare = async (c: any, next: any) => {
 
-const assistantPrompt = "fruit = good"
 
-// Frame to capture user's favorite fruit.
-app.frame('/', (c) => {
-    return c.res({
-        action: '/submit',
-        image: (
-            <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-                Write the subject of your haiku
-            </div>
-        ),
-        intents: [
-            <TextInput placeholder="Enter a subject" />,
-            <Button >Send</Button>
-        ]
-    })
-})
+    await next()
+    console.log(c)
+    const { inputText, frameData, deriveState } = c;
 
-// Frame to display user's response.
-app.frame('/submit', async (c) => {
-    const { frameData, buttonValue, status, inputText } = c;
+    const userPrompt = `"subject: ${inputText}"`
+
     const haikipu: Haikipu = {
         title: inputText || '',
         id: frameData?.messageHash.toString() || '',
@@ -41,19 +28,86 @@ app.frame('/submit', async (c) => {
         haiku: "",
         explainer: "",
     };
-    const userPrompt = `Subject: ${inputText}`
-    const result = await hAIku(haikipu, systemPrompt, assistantPrompt, userPrompt)
 
-    let text = result.haiku
+    await hAIku(haikipu, systemPrompt, assistantPrompt, userPrompt)
+}
+
+const app = new Frog<{ State: State }>({
+    basePath: '/api',
+    initialState: { id: '', haikipu: {} }
+})
+
+const systemPrompt = "Write a haiku about a the subject respond in a JSON format with the following structure: {haiku: string, haikuExplainer:string}"
+
+const assistantPrompt = "Haiku, unrhymed poetic form consisting of 17 syllables arranged in three lines of 5, 7, and 5 syllables respectively"
+
+// Frame to capture user's favorite fruit.
+app.frame('/', (c) => {
+    const { deriveState, frameData } = c
+    const state = deriveState(previousState => {
+        previousState.id = frameData?.messageHash.toString() || ''
+    })
+
     return c.res({
-        action: '/',
+        action: '/submit',
         image: (
-            <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-                Haiku: {text}
+            <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
+                Write the subject of your haiku
+                <br /> <span>query 1: {state.id}</span>
             </div>
         ),
         intents: [
-            <Button >Back</Button>
+            <TextInput placeholder="Enter a subject" />,
+            <Button >Send</Button>
+        ]
+    })
+})
+
+// Frame to display user's response.
+app.frame('/submit', aiMiddleWare, (c) => {
+    const { deriveState, frameData, buttonValue, status, inputText } = c;
+
+    const userPrompt = `Subject: ${inputText}`
+    const state = deriveState(previousState => {
+        previousState
+    })
+
+    return c.res({
+        image: (
+            <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
+
+                <br /> <span> Title: {inputText}
+
+                    <br /> <span>query 1: {state.id}</span>
+                </span>
+            </div>
+        ),
+        intents: [
+            <Button action="/" >Back</Button>,
+            <Button action="/render" >Render</Button>
+        ]
+    })
+})
+
+app.frame('/render', async (c) => {
+    const { deriveState } = c;
+    const state = await deriveState(async previousState => {
+        const haiku = await fetch(`http://localhost:3000/api/mongo/haiku?id=${previousState.id}`)
+        const hk = await haiku.json()
+        console.log(hk)
+        previousState.haikipu = hk[0] && hk[0].haikipu
+    })
+    return c.res({
+        image: (
+            <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
+
+                <br /> <span> Title: {state.haikipu?.haiku || "no haiku"}</span>
+            </div>
+        ),
+        intents: [
+            <Button action="/" >Back</Button>,
+
+            <Button action="/render" >Refresh</Button>
         ]
     })
 })

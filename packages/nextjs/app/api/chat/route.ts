@@ -48,10 +48,6 @@ export async function POST(request: NextRequest) {
 
         messages.push(systemMessage);
 
-
-
-
-
         const llm = new OpenAI({
             model: (process.env.MODEL as any) ?? "gpt-4-0125-preview",
             maxTokens: 2512,

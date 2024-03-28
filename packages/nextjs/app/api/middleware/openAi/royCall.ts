@@ -130,20 +130,21 @@ async function generateHackathonProposal(haikiput: Haikipu, systemPrompt: string
         response,
         serviceContext,
         raw: response.response,
-        sourceNodes: JSON.stringify(response.sourceNodes),
-        firstNode: !!response.sourceNodes?.length && response.sourceNodes[0],
+        firstNode: !!response.sourceNodes?.length && response.sourceNodes[0].hash,
     });
     const usedEmbeddingIds = response.sourceNodes?.map(node => node.id_) || [];
+
     const parsedResponse = JSON.parse(response.response);
+
     const haikipu: Haikipu = {
         title: haikiput.title,
         id: haikiput.id,
         address: haikiput.address,
-        timestamp: haikiput.timestamp,
+        timestamp: Date.now().toString(),
         type: haikiput.type,
         contextSummary: haikiput.contextSummary,
         haiku: parsedResponse.haiku,
-        explainer: parsedResponse.contextConnection,
+        explainer: parsedResponse.haikuExplainer,
     };
 
     return { haikipu, messages, usedEmbeddingIds };
@@ -178,7 +179,6 @@ export async function hAIku(haikiput: Haikipu, systemPrompt: string, assistantPr
     );
     //
     return haikipu;
-
 }
 
 export const someVar = async (c: any, next: any) => {
