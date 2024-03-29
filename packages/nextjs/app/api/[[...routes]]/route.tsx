@@ -1,5 +1,5 @@
 /** @jsxImportSource frog/jsx */
-import { Button, Frog, TextInput } from 'frog'
+import { parseEther, Button, Frog, TextInput } from 'frog'
 import { handle } from 'frog/next'
 import { devtools } from 'frog/dev'
 import { serveStatic } from 'frog/serve-static'
@@ -27,11 +27,51 @@ app.frame('/', async (c) => {
         previousState.id = frameData?.messageHash.toString() || ''
     })
     return c.res({
+        action: '/landing',
+        image: (
+            <div style={{
+                color: 'white',
+                display: 'flex',
+                flexDirection: "column",
+                fontSize: 60,
+                padding: 16,
+                alignItems: "center",
+                justifyContent: "center",
+                left: 0, right: 0, top: 0, bottom: 0, position: "absolute"
+            }}>
+                Haiku Maker
+                <span style={{ fontSize: 20, bottom: 0, right: 0, position: "relative" }}> made by the Nerds</span>
+            </div>
+        ),
+        intents: [
+            <Button >Enter</Button>
+        ]
+    })
+})
+
+app.frame('/landing', async (c) => {
+    const { deriveState, frameData } = c
+
+    const state = deriveState(previousState => {
+        previousState.id = frameData?.messageHash.toString() || ''
+    })
+
+    const disp = state.id.substring(0, Math.min(state.id.length, 10))
+    return c.res({
         action: '/submit',
         image: (
-            <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
+            <div style={{
+                color: 'white',
+                display: 'flex',
+                flexDirection: "column",
+                fontSize: 60,
+                padding: 16,
+                alignItems: "center",
+                justifyContent: "center",
+                left: 0, right: 0, top: 0, bottom: 0, position: "absolute"
+            }}>
                 Write the subject of your haiku
-                <br /> <span>query 1: {state.id}</span>
+                <br /> <span style={{ fontSize: 30 }}>Id: {disp}</span>
             </div>
         ),
         intents: [
@@ -47,6 +87,8 @@ app.frame('/submit', async (c) => {
     const state = deriveState(previousState => {
         previousState
     })
+
+    const disp = state.id.substring(0, Math.min(state.id.length, 10))
     const userPrompt = `Subject: ${inputText}`
     await inngest.send({
         name: "test/hello.world",
@@ -55,18 +97,23 @@ app.frame('/submit', async (c) => {
             prompt: userPrompt,
         },
     });
-
-
-
-
     return c.res({
         image: (
-            <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
+            <div style={{
+                color: 'white',
+                display: 'flex',
+                flexDirection: "column",
+                fontSize: 60,
+                padding: 16,
+                alignItems: "center",
+                justifyContent: "center",
+                left: 0, right: 0, top: 0, bottom: 0, position: "absolute"
+            }}>
 
-                <br /> <span> Title: {inputText}
+                <br /> <span> Haiku Title:</span><br />
+                <span> {inputText}</span>
 
-                    <br /> <span>query 1: {state.id}</span>
-                </span>
+                <br /> <span style={{ fontSize: 30 }}>Id: {disp}</span>
             </div>
         ),
         intents: [
@@ -75,27 +122,69 @@ app.frame('/submit', async (c) => {
         ]
     })
 })
-
+//render haiku
 app.frame('/render', async (c) => {
-    const { deriveState } = c;
+    const { deriveState, inputText } = c;
     const state = await deriveState(async previousState => {
         const haiku = await fetch(`https://fworks.vercel.app/api/mongo/haiku?id=${previousState.id}`)
         const hk = await haiku.json()
         console.log(hk)
         previousState.haikipu = hk[0] && hk[0].haikipu
     })
+    const disp = state.id.substring(0, Math.min(state.id.length, 10))
     return c.res({
         image: (
-            <div style={{ color: 'white', display: 'flex', flexDirection: "column", fontSize: 60 }}>
-                <span>query Id: {state.id}</span>
-                <br /> <span> Title: {state.haikipu?.haiku || "no haiku"}</span>
+            <div style={{
+                color: 'white',
+                display: 'flex',
+                flexDirection: "column",
+                fontSize: 60,
+                padding: 16,
+                alignItems: "center",
+                justifyContent: "center",
+                left: 30, right: 0, top: 0, bottom: 0, position: "absolute"
+            }}>
+
+
+                <br /> <span> Haiku Title:</span><br />
+                <span> {state.haikipu?.title}</span>
+
+                <br /> <span style={{ fontSize: 30 }}>Id: {disp}</span>
+
+                <br /> <span> Haiku: {state.haikipu?.haiku || "no haiku, refresh"}</span>
             </div>
         ),
         intents: [
-            <Button action="/" >Back</Button>,
+            <Button.Transaction target="/mint" >Mint</Button.Transaction>,
 
-            <Button action="/render" >Refresh</Button>
+            <Button action="/render" >Refresh</Button>,
+            <Button action="/">Back</Button>
         ]
+    })
+})
+
+
+//transaction routes
+const abi = [
+    {
+        inputs: [{ internalType: "string", name: "uri", type: "string" }],
+        name: "mint",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+] as const
+
+app.transaction('/mint', (c) => {
+    const { inputText, previousState } = c
+    // Contract transaction response.
+    return c.contract({
+        abi,
+        chainId: 'eip155:8453',
+        functionName: 'mint',
+        args: [previousState.haikipu.haiku],
+        to: '0xb46923029D8206e54baEa750e8e74E6b7Af26b16',
+        value: parseEther("0.000071")
     })
 })
 
