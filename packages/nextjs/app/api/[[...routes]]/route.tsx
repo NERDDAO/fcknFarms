@@ -31,6 +31,7 @@ app.frame('/', async (c) => {
         image: (
             <div style={{
                 color: 'white',
+                backgroundColor: "black",
                 display: 'flex',
                 flexDirection: "column",
                 fontSize: 60,
@@ -40,7 +41,7 @@ app.frame('/', async (c) => {
                 left: 0, right: 0, top: 0, bottom: 0, position: "absolute"
             }}>
                 Haiku Maker
-                <span style={{ fontSize: 20, bottom: 0, right: 0, position: "relative" }}> made by the Nerds</span>
+                <span style={{ fontSize: 20, bottom: 0, right: 0, position: "relative", backgroundColor: "black", color: "white" }}> made by the Nerds</span>
             </div>
         ),
         intents: [
@@ -62,6 +63,7 @@ app.frame('/landing', async (c) => {
         image: (
             <div style={{
                 color: 'white',
+                backgroundColor: "black",
                 display: 'flex',
                 flexDirection: "column",
                 fontSize: 60,
@@ -101,6 +103,7 @@ app.frame('/submit', async (c) => {
         image: (
             <div style={{
                 color: 'white',
+                backgroundColor: "black",
                 display: 'flex',
                 flexDirection: "column",
                 fontSize: 60,
@@ -136,6 +139,7 @@ app.frame('/render', async (c) => {
         image: (
             <div style={{
                 color: 'white',
+                backgroundColor: "black",
                 display: 'flex',
                 flexDirection: "column",
                 fontSize: 60,
@@ -183,7 +187,7 @@ app.transaction('/mint', (c) => {
         chainId: 'eip155:8453',
         functionName: 'mint',
         args: [previousState.haikipu.haiku],
-        to: '0xb46923029D8206e54baEa750e8e74E6b7Af26b16',
+        to: '0xd02D7C87E9EB71ABCd544D07230849Fc5EdcbD55',
         value: parseEther("0.000071")
     })
 })
