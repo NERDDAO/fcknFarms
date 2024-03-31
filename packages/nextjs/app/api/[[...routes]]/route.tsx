@@ -5,6 +5,7 @@ import { devtools } from 'frog/dev'
 import { serveStatic } from 'frog/serve-static'
 import { Haikipu, hAIku } from "../middleware/openAi/royCall"
 import { inngest } from "../../../inngest/client"; // Import our client
+import { getNftMetadata } from '~~/app/lib/getNFTMetadata'
 
 // Opt out of caching; every request should send a new event
 export const dynamic = "force-dynamic";
@@ -45,7 +46,8 @@ app.frame('/', async (c) => {
             </div>
         ),
         intents: [
-            <Button >Enter</Button>
+            <Button >Enter</Button>,
+            <Button action="/view">View Haikus</Button>
         ]
     })
 })
@@ -78,7 +80,7 @@ app.frame('/landing', async (c) => {
         ),
         intents: [
             <TextInput placeholder="Enter a subject" />,
-            <Button >Send</Button>
+            <Button >Send</Button>,
         ]
     })
 })
@@ -162,6 +164,39 @@ app.frame('/render', async (c) => {
             <Button.Transaction target="/mint" >Mint</Button.Transaction>,
 
             <Button action="/render" >Refresh</Button>,
+            <Button action="/view">View</Button>,
+            <Button action="/">Back</Button>
+        ]
+    })
+})
+
+app.frame('/view', async (c) => {
+    const hAIkuContract = "0xd02D7C87E9EB71ABCd544D07230849Fc5EdcbD55";
+
+    const maxSupply = 20;
+    const randomTokenId = Math.floor(Math.random() * maxSupply) + 1;
+    const nftMetadata = await getNftMetadata(hAIkuContract, randomTokenId);
+
+    const nftImageUrl = nftMetadata.image?.originalUrl;
+    console.log(nftImageUrl, nftMetadata);
+
+    return c.res({
+        image: nftImageUrl ? (
+            <div style={{
+                color: 'white',
+                display: 'flex',
+                flexDirection: "column",
+                fontSize: 60,
+                padding: 16,
+                alignItems: "center",
+                justifyContent: "center",
+                left: 30, right: 0, top: 0, bottom: 0, position: "absolute"
+            }}>
+                <span> Haiku #{randomTokenId}</span><br />
+                <span>{nftMetadata.name}</span>
+            </div>) : (<div>loading...</div>),
+        intents: [
+            <Button action="/view">Reroll</Button>,
             <Button action="/">Back</Button>
         ]
     })
