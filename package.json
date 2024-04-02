@@ -37,6 +37,7 @@
         "usehooks-ts@^2.7.2": "patch:usehooks-ts@npm:^2.7.2#./.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch"
     },
     "devDependencies": {
+        "@types/react-modal": "^3",
         "husky": "~8.0.3",
         "lint-staged": "~13.2.2",
         "next": "~14.0.4",
@@ -45,6 +46,10 @@
     "packageManager": "yarn@3.2.3",
     "dependencies": {
         "ai": "^3.0.14",
+        "ethers": "^6.11.1",
+        "react-modal": "^3.16.1",
+        "react-winbox": "^1.5.0",
+        "react-youtube": "^10.1.0",
         "zod": "^3.22.4"
     }
 }
