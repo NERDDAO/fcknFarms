@@ -253,6 +253,471 @@ const externalContracts = {
                 { stateMutability: "payable", type: "receive" },
             ],
         },
+        "$FCKN/$WETH": {
+            address: "0x9c449D92b6Fcb8285b8175B8f9C5dc00F05B797C",
+            abi: [
+                {
+                    inputs: [
+                        { internalType: "uint96", name: "initialTokenSupply", type: "uint96" },
+                        { internalType: "address", name: "initialSupplyOwner", type: "address" },
+                        { internalType: "uint96", name: "tokensPerNft", type: "uint96" },
+                    ],
+                    stateMutability: "nonpayable",
+                    type: "constructor",
+                },
+                { inputs: [], name: "AlreadyInitialized", type: "error" },
+                { inputs: [], name: "ApprovalCallerNotOwnerNorApproved", type: "error" },
+                { inputs: [], name: "DNAlreadyInitialized", type: "error" },
+                { inputs: [], name: "InsufficientAllowance", type: "error" },
+                { inputs: [], name: "InsufficientBalance", type: "error" },
+                { inputs: [], name: "LinkMirrorContractFailed", type: "error" },
+                { inputs: [], name: "MirrorAddressIsZero", type: "error" },
+                { inputs: [], name: "NewOwnerIsZeroAddress", type: "error" },
+                { inputs: [], name: "NoHandoverRequest", type: "error" },
+                { inputs: [], name: "SenderNotMirror", type: "error" },
+                { inputs: [], name: "TokenDoesNotExist", type: "error" },
+                { inputs: [], name: "TotalSupplyOverflow", type: "error" },
+                { inputs: [], name: "TransferCallerNotOwnerNorApproved", type: "error" },
+                { inputs: [], name: "TransferFromIncorrectOwner", type: "error" },
+                { inputs: [], name: "TransferToZeroAddress", type: "error" },
+                { inputs: [], name: "Unauthorized", type: "error" },
+                { inputs: [], name: "ZeroTokensPerNft", type: "error" },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "owner", type: "address" },
+                        { indexed: true, internalType: "address", name: "spender", type: "address" },
+                        { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "Approval",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [{ indexed: true, internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "OwnershipHandoverCanceled",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [{ indexed: true, internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "OwnershipHandoverRequested",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "oldOwner", type: "address" },
+                        { indexed: true, internalType: "address", name: "newOwner", type: "address" },
+                    ],
+                    name: "OwnershipTransferred",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "target", type: "address" },
+                        { indexed: false, internalType: "bool", name: "status", type: "bool" },
+                    ],
+                    name: "SkipNFTSet",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "from", type: "address" },
+                        { indexed: true, internalType: "address", name: "to", type: "address" },
+                        { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "Transfer",
+                    type: "event",
+                },
+                { stateMutability: "payable", type: "fallback" },
+                {
+                    inputs: [
+                        { internalType: "address", name: "owner", type: "address" },
+                        { internalType: "address", name: "spender", type: "address" },
+                    ],
+                    name: "allowance",
+                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [
+                        { internalType: "address", name: "spender", type: "address" },
+                        { internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "approve",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+                    name: "balanceOf",
+                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                { inputs: [], name: "cancelOwnershipHandover", outputs: [], stateMutability: "payable", type: "function" },
+                {
+                    inputs: [{ internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "completeOwnershipHandover",
+                    outputs: [],
+                    stateMutability: "payable",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "decimals",
+                    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+                    stateMutability: "pure",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "a", type: "address" }],
+                    name: "getSkipNFT",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "mirror",
+                    outputs: [{ internalType: "contract DN404Mirror", name: "", type: "address" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "mirrorERC721",
+                    outputs: [{ internalType: "address", name: "", type: "address" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "name",
+                    outputs: [{ internalType: "string", name: "", type: "string" }],
+                    stateMutability: "pure",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "owner",
+                    outputs: [{ internalType: "address", name: "result", type: "address" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "ownershipHandoverExpiresAt",
+                    outputs: [{ internalType: "uint256", name: "result", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                { inputs: [], name: "renounceOwnership", outputs: [], stateMutability: "payable", type: "function" },
+                { inputs: [], name: "requestOwnershipHandover", outputs: [], stateMutability: "payable", type: "function" },
+                {
+                    inputs: [{ internalType: "string", name: "baseURI_", type: "string" }],
+                    name: "setBaseURI",
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "bool", name: "skipNFT", type: "bool" }],
+                    name: "setSkipNFT",
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "symbol",
+                    outputs: [{ internalType: "string", name: "", type: "string" }],
+                    stateMutability: "pure",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+                    name: "tokenURI",
+                    outputs: [{ internalType: "string", name: "result", type: "string" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "totalSupply",
+                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [
+                        { internalType: "address", name: "to", type: "address" },
+                        { internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "transfer",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [
+                        { internalType: "address", name: "from", type: "address" },
+                        { internalType: "address", name: "to", type: "address" },
+                        { internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "transferFrom",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+                    name: "transferOwnership",
+                    outputs: [],
+                    stateMutability: "payable",
+                    type: "function",
+                },
+                { stateMutability: "payable", type: "receive" },
+            ],
+        },
+
+        "$FCKN/$DEGEN": {
+            address: "0x0b1174Bdf13057B7b31D7a3cb5EEe186F33b4107",
+            abi: [
+                {
+                    inputs: [
+                        { internalType: "uint96", name: "initialTokenSupply", type: "uint96" },
+                        { internalType: "address", name: "initialSupplyOwner", type: "address" },
+                        { internalType: "uint96", name: "tokensPerNft", type: "uint96" },
+                    ],
+                    stateMutability: "nonpayable",
+                    type: "constructor",
+                },
+                { inputs: [], name: "AlreadyInitialized", type: "error" },
+                { inputs: [], name: "ApprovalCallerNotOwnerNorApproved", type: "error" },
+                { inputs: [], name: "DNAlreadyInitialized", type: "error" },
+                { inputs: [], name: "InsufficientAllowance", type: "error" },
+                { inputs: [], name: "InsufficientBalance", type: "error" },
+                { inputs: [], name: "LinkMirrorContractFailed", type: "error" },
+                { inputs: [], name: "MirrorAddressIsZero", type: "error" },
+                { inputs: [], name: "NewOwnerIsZeroAddress", type: "error" },
+                { inputs: [], name: "NoHandoverRequest", type: "error" },
+                { inputs: [], name: "SenderNotMirror", type: "error" },
+                { inputs: [], name: "TokenDoesNotExist", type: "error" },
+                { inputs: [], name: "TotalSupplyOverflow", type: "error" },
+                { inputs: [], name: "TransferCallerNotOwnerNorApproved", type: "error" },
+                { inputs: [], name: "TransferFromIncorrectOwner", type: "error" },
+                { inputs: [], name: "TransferToZeroAddress", type: "error" },
+                { inputs: [], name: "Unauthorized", type: "error" },
+                { inputs: [], name: "ZeroTokensPerNft", type: "error" },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "owner", type: "address" },
+                        { indexed: true, internalType: "address", name: "spender", type: "address" },
+                        { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "Approval",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [{ indexed: true, internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "OwnershipHandoverCanceled",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [{ indexed: true, internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "OwnershipHandoverRequested",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "oldOwner", type: "address" },
+                        { indexed: true, internalType: "address", name: "newOwner", type: "address" },
+                    ],
+                    name: "OwnershipTransferred",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "target", type: "address" },
+                        { indexed: false, internalType: "bool", name: "status", type: "bool" },
+                    ],
+                    name: "SkipNFTSet",
+                    type: "event",
+                },
+                {
+                    anonymous: false,
+                    inputs: [
+                        { indexed: true, internalType: "address", name: "from", type: "address" },
+                        { indexed: true, internalType: "address", name: "to", type: "address" },
+                        { indexed: false, internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "Transfer",
+                    type: "event",
+                },
+                { stateMutability: "payable", type: "fallback" },
+                {
+                    inputs: [
+                        { internalType: "address", name: "owner", type: "address" },
+                        { internalType: "address", name: "spender", type: "address" },
+                    ],
+                    name: "allowance",
+                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [
+                        { internalType: "address", name: "spender", type: "address" },
+                        { internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "approve",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+                    name: "balanceOf",
+                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                { inputs: [], name: "cancelOwnershipHandover", outputs: [], stateMutability: "payable", type: "function" },
+                {
+                    inputs: [{ internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "completeOwnershipHandover",
+                    outputs: [],
+                    stateMutability: "payable",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "decimals",
+                    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+                    stateMutability: "pure",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "a", type: "address" }],
+                    name: "getSkipNFT",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "mirror",
+                    outputs: [{ internalType: "contract DN404Mirror", name: "", type: "address" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "mirrorERC721",
+                    outputs: [{ internalType: "address", name: "", type: "address" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "name",
+                    outputs: [{ internalType: "string", name: "", type: "string" }],
+                    stateMutability: "pure",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "owner",
+                    outputs: [{ internalType: "address", name: "result", type: "address" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "pendingOwner", type: "address" }],
+                    name: "ownershipHandoverExpiresAt",
+                    outputs: [{ internalType: "uint256", name: "result", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                { inputs: [], name: "renounceOwnership", outputs: [], stateMutability: "payable", type: "function" },
+                { inputs: [], name: "requestOwnershipHandover", outputs: [], stateMutability: "payable", type: "function" },
+                {
+                    inputs: [{ internalType: "string", name: "baseURI_", type: "string" }],
+                    name: "setBaseURI",
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "bool", name: "skipNFT", type: "bool" }],
+                    name: "setSkipNFT",
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "symbol",
+                    outputs: [{ internalType: "string", name: "", type: "string" }],
+                    stateMutability: "pure",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+                    name: "tokenURI",
+                    outputs: [{ internalType: "string", name: "result", type: "string" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [],
+                    name: "totalSupply",
+                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+                    stateMutability: "view",
+                    type: "function",
+                },
+                {
+                    inputs: [
+                        { internalType: "address", name: "to", type: "address" },
+                        { internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "transfer",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [
+                        { internalType: "address", name: "from", type: "address" },
+                        { internalType: "address", name: "to", type: "address" },
+                        { internalType: "uint256", name: "amount", type: "uint256" },
+                    ],
+                    name: "transferFrom",
+                    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+                    stateMutability: "nonpayable",
+                    type: "function",
+                },
+                {
+                    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+                    name: "transferOwnership",
+                    outputs: [],
+                    stateMutability: "payable",
+                    type: "function",
+                },
+                { stateMutability: "payable", type: "receive" },
+            ],
+        },
         xStakingPool: {
             address: "0x7de38e45A074fBa05053801Bd3a66f3C8C155d31",
             abi: [
@@ -532,8 +997,562 @@ const externalContracts = {
             ],
         },
 
-        erc20StakingPool: {
-            address: "0xEe0aD1622A923368cea05d92b29938aB052144b6",
+        wethStakingPool: {
+            address: "0x8b7246d22dfe2f8e5f09e466f5f98f2f62dd52b6",
+            abi: [
+                {
+                    type: "function",
+                    name: "DURATION",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "DURATION_",
+                            type: "uint64",
+                            internalType: "uint64",
+                        },
+                    ],
+                    stateMutability: "pure",
+                },
+                {
+                    type: "function",
+                    name: "balanceOf",
+                    inputs: [
+                        {
+                            name: "",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "earned",
+                    inputs: [
+                        {
+                            name: "account",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "exit",
+                    inputs: [],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "getReward",
+                    inputs: [],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "initialize",
+                    inputs: [
+                        {
+                            name: "initialOwner",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "isRewardDistributor",
+                    inputs: [
+                        {
+                            name: "",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "bool",
+                            internalType: "bool",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "lastTimeRewardApplicable",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint64",
+                            internalType: "uint64",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "lastUpdateTime",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint64",
+                            internalType: "uint64",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "multicall",
+                    inputs: [
+                        {
+                            name: "data",
+                            type: "bytes[]",
+                            internalType: "bytes[]",
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: "results",
+                            type: "bytes[]",
+                            internalType: "bytes[]",
+                        },
+                    ],
+                    stateMutability: "payable",
+                },
+                {
+                    type: "function",
+                    name: "notifyRewardAmount",
+                    inputs: [
+                        {
+                            name: "reward",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "owner",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "periodFinish",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint64",
+                            internalType: "uint64",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "rewardPerToken",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "rewardPerTokenStored",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "rewardRate",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "rewardToken",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "rewardToken_",
+                            type: "address",
+                            internalType: "contract ERC20",
+                        },
+                    ],
+                    stateMutability: "pure",
+                },
+                {
+                    type: "function",
+                    name: "rewards",
+                    inputs: [
+                        {
+                            name: "",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "selfPermit",
+                    inputs: [
+                        {
+                            name: "token",
+                            type: "address",
+                            internalType: "contract ERC20",
+                        },
+                        {
+                            name: "value",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                        {
+                            name: "deadline",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                        {
+                            name: "v",
+                            type: "uint8",
+                            internalType: "uint8",
+                        },
+                        {
+                            name: "r",
+                            type: "bytes32",
+                            internalType: "bytes32",
+                        },
+                        {
+                            name: "s",
+                            type: "bytes32",
+                            internalType: "bytes32",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "payable",
+                },
+                {
+                    type: "function",
+                    name: "selfPermitIfNecessary",
+                    inputs: [
+                        {
+                            name: "token",
+                            type: "address",
+                            internalType: "contract ERC20",
+                        },
+                        {
+                            name: "value",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                        {
+                            name: "deadline",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                        {
+                            name: "v",
+                            type: "uint8",
+                            internalType: "uint8",
+                        },
+                        {
+                            name: "r",
+                            type: "bytes32",
+                            internalType: "bytes32",
+                        },
+                        {
+                            name: "s",
+                            type: "bytes32",
+                            internalType: "bytes32",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "payable",
+                },
+                {
+                    type: "function",
+                    name: "setRewardDistributor",
+                    inputs: [
+                        {
+                            name: "rewardDistributor",
+                            type: "address",
+                            internalType: "address",
+                        },
+                        {
+                            name: "isRewardDistributor_",
+                            type: "bool",
+                            internalType: "bool",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "stake",
+                    inputs: [
+                        {
+                            name: "amount",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "stakeToken",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "stakeToken_",
+                            type: "address",
+                            internalType: "contract ERC20",
+                        },
+                    ],
+                    stateMutability: "pure",
+                },
+                {
+                    type: "function",
+                    name: "totalSupply",
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "transferOwnership",
+                    inputs: [
+                        {
+                            name: "newOwner",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "function",
+                    name: "userRewardPerTokenPaid",
+                    inputs: [
+                        {
+                            name: "",
+                            type: "address",
+                            internalType: "address",
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: "",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    stateMutability: "view",
+                },
+                {
+                    type: "function",
+                    name: "withdraw",
+                    inputs: [
+                        {
+                            name: "amount",
+                            type: "uint256",
+                            internalType: "uint256",
+                        },
+                    ],
+                    outputs: [],
+                    stateMutability: "nonpayable",
+                },
+                {
+                    type: "event",
+                    name: "OwnershipTransferred",
+                    inputs: [
+                        {
+                            name: "previousOwner",
+                            type: "address",
+                            indexed: true,
+                            internalType: "address",
+                        },
+                        {
+                            name: "newOwner",
+                            type: "address",
+                            indexed: true,
+                            internalType: "address",
+                        },
+                    ],
+                    anonymous: false,
+                },
+                {
+                    type: "event",
+                    name: "RewardAdded",
+                    inputs: [
+                        {
+                            name: "reward",
+                            type: "uint256",
+                            indexed: false,
+                            internalType: "uint256",
+                        },
+                    ],
+                    anonymous: false,
+                },
+                {
+                    type: "event",
+                    name: "RewardPaid",
+                    inputs: [
+                        {
+                            name: "user",
+                            type: "address",
+                            indexed: true,
+                            internalType: "address",
+                        },
+                        {
+                            name: "reward",
+                            type: "uint256",
+                            indexed: false,
+                            internalType: "uint256",
+                        },
+                    ],
+                    anonymous: false,
+                },
+                {
+                    type: "event",
+                    name: "Staked",
+                    inputs: [
+                        {
+                            name: "user",
+                            type: "address",
+                            indexed: true,
+                            internalType: "address",
+                        },
+                        {
+                            name: "amount",
+                            type: "uint256",
+                            indexed: false,
+                            internalType: "uint256",
+                        },
+                    ],
+                    anonymous: false,
+                },
+                {
+                    type: "event",
+                    name: "Withdrawn",
+                    inputs: [
+                        {
+                            name: "user",
+                            type: "address",
+                            indexed: true,
+                            internalType: "address",
+                        },
+                        {
+                            name: "amount",
+                            type: "uint256",
+                            indexed: false,
+                            internalType: "uint256",
+                        },
+                    ],
+                    anonymous: false,
+                },
+                {
+                    type: "error",
+                    name: "Error_AlreadyInitialized",
+                    inputs: [],
+                },
+                {
+                    type: "error",
+                    name: "Error_AmountTooLarge",
+                    inputs: [],
+                },
+                {
+                    type: "error",
+                    name: "Error_NotRewardDistributor",
+                    inputs: [],
+                },
+                {
+                    type: "error",
+                    name: "Error_ZeroOwner",
+                    inputs: [],
+                },
+                {
+                    type: "error",
+                    name: "Ownable_NewOwnerZeroAddress",
+                    inputs: [],
+                },
+                {
+                    type: "error",
+                    name: "Ownable_NotOwner",
+                    inputs: [],
+                },
+            ],
+        },
+        degenStakingPool: {
+            address: "0xcF9ccEF568228831CBed0C5b5fB961Ba70e833F1",
             abi: [
                 {
                     type: "function",

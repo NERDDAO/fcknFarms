@@ -20,7 +20,7 @@ function FarmApprove() {
     };
 
     return (
-        <button onClick={handleApprove}>Approve</button>
+        <button onClick={handleApprove}>Just $FCKN Approve</button>
     );
 }
 
