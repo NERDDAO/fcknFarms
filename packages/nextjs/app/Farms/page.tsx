@@ -124,8 +124,8 @@ const Farms: NextPage = () => {
         const [modalIsOpen, setModalIsOpen] = useState(false);
         const [modal2IsOpen, setModal2IsOpen] = useState(false);
         const [optIndex, setOptIndex] = useState(0);
-        const [fcknBalance, setFcknBalance] = useState(0n)
-        const [xFcknBalance, setXFcknBalance] = useState(0n)
+        const [fcknBalance, setFcknBalance] = useState(0)
+        const [xFcknBalance, setXFcknBalance] = useState(0)
         const indexHandler = () => {
             if (farmIndex >= farmList.length - 1) {
                 setFarmIndex(0)
@@ -163,7 +163,7 @@ const Farms: NextPage = () => {
         const stake = useScaffoldContractWrite({
             contractName: currentFarm.poolName,
             functionName: "stake",
-            args: [fcknBalance]
+            args: [BigInt(fcknBalance * 1e18)]
         })
 
         const approve = useScaffoldContractWrite({
@@ -176,7 +176,7 @@ const Farms: NextPage = () => {
 
             contractName: currentFarm.poolName,
             functionName: "withdraw",
-            args: [xFcknBalance]
+            args: [BigInt(xFcknBalance * 1e18)]
         })
 
         useEffect(() => {
@@ -234,7 +234,7 @@ const Farms: NextPage = () => {
                         <strong>$FCKN 🍗 Liquidity Staking</strong>
                         <span className="text-sm">Balance:  {(Number(balance?.data) * 1e-18).toFixed(3)} {currentFarm.name} </span>
 
-                        <label className="cursor-pointer" onClick={() => setFcknBalance(balance.data || 0n)}><input className="border-2" placeholder="$FCKN 🍗 Balance" value={(Number(fcknBalance) * 1e-18).toFixed(3)} onChange={e => setFcknBalance(BigInt(e.target.value))} />max</label>
+                        <label className="cursor-pointer" onClick={() => setFcknBalance(Number(balance.data) * 1e-18 || 0)}>max</label><input className="border-2" placeholder="$FCKN 🍗 Balance" value={fcknBalance} type="number" onChange={e => setFcknBalance(Number(e.target.value))} />
 
                         <Tippy className="relative" content={<span>$FCKN  🍗 STAKE</span>}>
                             <button className="border-e-rose-200 border-2 bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { stake.write(); setModalIsOpen(false) }} />
@@ -250,7 +250,7 @@ const Farms: NextPage = () => {
                         <strong>$FCKN 🍗 unStaking</strong>
                         <span className="text-sm">$FCKN 🍗 Balance:  {(Number(balance.data) * 10e-18).toFixed(3)} $FCKN</span>
                         <span className="text-sm"> Staked $FCKN 🍗 Balance: {(Number(stakedBalance.data) * 10e-18).toFixed(3)} $FCKN </span>
-                        <label onClick={() => setXFcknBalance(stakedBalance.data || 0n)} className="cursor-pointer" ><input className="border-2" placeholder="$xFCKN Balance" value={Number(xFcknBalance) * 1e-18} onChange={e => setXFcknBalance(BigInt(e.target.value))} />max</label>
+                        <label onClick={() => setXFcknBalance(Number(stakedBalance.data) * 1e-18 || 0)} className="cursor-pointer" >max</label><input className="border-2" placeholder="$xFCKN Balance" value={xFcknBalance} type="number" onChange={e => setXFcknBalance(Number(e.target.value))} />
                         <Tippy className="relative" content={<span>$FCKN  🍗 WITHDRAW</span>}>
 
                             <button className="border-e-rose-200 border-2 bg-[url(/noLiquidity.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { unstake.write(); setModalIsOpen(false) }} />
@@ -299,8 +299,8 @@ const Farms: NextPage = () => {
         const [modalIsOpen, setModalIsOpen] = useState(false);
         const [modal2IsOpen, setModal2IsOpen] = useState(false);
         const [optIndex, setOptIndex] = useState(0);
-        const [fcknBalance, setFcknBalance] = useState(0n)
-        const [xFcknBalance, setXFcknBalance] = useState(0n)
+        const [fcknBalance, setFcknBalance] = useState(0)
+        const [xFcknBalance, setXFcknBalance] = useState(0)
         const approval = useScaffoldContractRead({
             contractName: "fcknToken",
             functionName: "allowance",
@@ -324,13 +324,13 @@ const Farms: NextPage = () => {
         const stake = useScaffoldContractWrite({
             contractName: "xStakingPool",
             functionName: "stake",
-            args: [fcknBalance]
+            args: [BigInt(fcknBalance * 1e18)]
         })
 
         const unstake = useScaffoldContractWrite({
             contractName: "xStakingPool",
             functionName: "withdraw",
-            args: [xFcknBalance]
+            args: [BigInt(xFcknBalance * 1e18)]
         })
 
         useEffect(() => {
@@ -359,21 +359,28 @@ const Farms: NextPage = () => {
                         <span className="text-sm">$FCKN 🍗 Balance:  {(Number(balance?.data) * 1e-18).toFixed(3)} $FCKN</span>
 
                         <span className="text-sm">Staked $FCKN 🍗 Balance: {((Number(ppShare.data) * 1e-18) * (Number(stakedBalance.data) * 1e-18)).toFixed(3)} $FCKN </span>
-                        <label className="cursor-pointer" onClick={() => setFcknBalance(balance.data || 0n)}><input className="border-2" placeholder="$FCKN 🍗 Balance" value={(Number(fcknBalance) * 1e-18).toFixed(3)} onChange={e => setXFcknBalance(BigInt(e.target.value))} />max</label>
-                        <button className="border-e-rose-200 border-2 bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { stake.write(); setModalIsOpen(false) }} />
-
-                        <button className="bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { setIsUnstake(true) }} />
+                        <label className="cursor-pointer" onClick={() => setFcknBalance(Number(balance.data) * 1e-18 || 0)}>max</label><input className="border-2" placeholder="$FCKN %🍗" value={fcknBalance} type="number" onChange={e => setFcknBalance(Number(e.target.value))} />
+                        <Tippy className="relative" content={<span>$FCKN  🍗 STAKE</span>}>
+                            <button className="border-e-rose-200 border-2 bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { stake.write(); setModalIsOpen(false) }} />
+                        </Tippy>
+                        <Tippy className="relative" content={<span>$FCKN  🍗 TOGGLE</span>}>
+                            <button className="bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { setIsUnstake(true) }} />
+                        </Tippy>
 
                     </>
                 case "withdraw":
                     return <>
                         <strong>$FCKN 🍗 unStaking</strong>
-                        <span className="text-sm">$FCKN 🍗 Balance:  {(Number(balance.data) * 10e-18).toFixed(3)} $FCKN</span>
-                        <span className="text-sm"> Staked $FCKN 🍗 Balance: {(Number(stakedBalance.data) * 10e-18).toFixed(3)} $FCKN </span>
-                        <label onClick={() => setXFcknBalance(stakedBalance.data || 0n)} className="cursor-pointer" ><input className="border-2" placeholder="$xFCKN Balance" value={Number(xFcknBalance) * 1e-18} onChange={e => setXFcknBalance(BigInt(e.target.value))} />max</label>
+                        <span className="text-sm">$FCKN 🍗 Balance:  {(Number(balance.data) * 1e-18).toFixed(3)} $FCKN</span>
+                        <span className="text-sm"> Staked $FCKN 🍗 Balance: {(Number(stakedBalance.data) * 1e-18).toFixed(3)} $FCKN </span>
+                        <label onClick={() => setXFcknBalance(Number(stakedBalance.data) * 1e-18 || 0)} className="cursor-pointer" >max</label> <input className="border-2" placeholder="$xFCKN Balance" value={Number(xFcknBalance)} type="number" onChange={e => setXFcknBalance(Number(e.target.value))} />
+                        <Tippy className="relative" content={<span>$FCKN  🍗 WITHDRAW</span>}>
 
-                        <button className="border-e-rose-200 border-2 bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { unstake.write(); setModalIsOpen(false) }} />
-                        <button className="bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { ; setIsUnstake(false) }} />
+                            <button className="border-e-rose-200 border-2 bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { unstake.write(); setModalIsOpen(false) }} />
+                        </Tippy>
+                        <Tippy className="relative" content={<span>$FCKN  🍗 TOGGLE</span>}>
+                            <button className="bg-[url(/chicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { ; setIsUnstake(false) }} />
+                        </Tippy>
                     </>
 
                 case "approve":
