@@ -2130,6 +2130,7 @@ __metadata:
     "@types/nprogress": ^0
     "@types/react": ^18.0.21
     "@types/react-copy-to-clipboard": ^5.0.4
+    "@types/react-modal": ^3
     "@typescript-eslint/eslint-plugin": ~5.40.0
     "@uniswap/sdk-core": ~4.0.1
     "@uniswap/v2-sdk": ~3.0.1
@@ -2141,6 +2142,7 @@ __metadata:
     eslint-config-next: ~14.0.4
     eslint-config-prettier: ~8.5.0
     eslint-plugin-prettier: ~4.2.1
+    ethers: ^6.11.1
     frog: latest
     hono: latest
     howler: ^2.2.4
@@ -2148,6 +2150,7 @@ __metadata:
     llamaindex: ^0.2.1
     next: ~14.0.4
     next-themes: ~0.2.1
+    next-transpile-modules: ^10.0.1
     nprogress: ~0.2.0
     postcss: ~8.4.16
     prettier: ~2.8.4
@@ -2156,6 +2159,9 @@ __metadata:
     react-copy-to-clipboard: ~5.1.0
     react-dom: ~18.2.0
     react-hot-toast: ~2.4.0
+    react-modal: ^3.16.1
+    react-winbox: ^1.5.0
+    react-youtube: ^10.1.0
     tailwindcss: ~3.3.3
     tippy.js: ^6.3.7
     type-fest: ~4.6.0
@@ -5778,7 +5784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.12.0":
+"enhanced-resolve@npm:^5.10.0, enhanced-resolve@npm:^5.12.0":
   version: 5.16.0
   resolution: "enhanced-resolve@npm:5.16.0"
   dependencies:
@@ -9562,6 +9568,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"next-transpile-modules@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "next-transpile-modules@npm:10.0.1"
+  dependencies:
+    enhanced-resolve: ^5.10.0
+  checksum: 6cfffd165769a04b153e60f49f4f3896d16aa688304616f66c7b94299e2229b04db368217e6a7300d3110fe988a6c6e68025bb2cbda3edf49e9b29109ff671bd
+  languageName: node
+  linkType: hard
+
 "next@npm:~14.0.4":
   version: 14.0.4
   resolution: "next@npm:14.0.4"
@@ -11732,15 +11747,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
-    "@types/react-modal": ^3
     ai: ^3.0.14
-    ethers: ^6.11.1
     husky: ~8.0.3
     lint-staged: ~13.2.2
     next: ~14.0.4
-    react-modal: ^3.16.1
-    react-winbox: ^1.5.0
-    react-youtube: ^10.1.0
     vercel: ~32.4.1
     zod: ^3.22.4
   languageName: unknown

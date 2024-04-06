@@ -10,7 +10,8 @@ import OsWindow from "~~/components/nerdOS/newWindow";
 import 'winbox/dist/css/winbox.min.css'; // required
 import 'winbox/dist/css/themes/modern.min.css'; // optional
 import 'winbox/dist/css/themes/white.min.css'; // optional
-import WinBox from 'react-winbox';
+import dynamic from 'next/dynamic';
+const WinBox = dynamic(() => import('react-winbox'), { ssr: false });
 import FarmApprove from "~~/components/nerdOS/farmApprove";
 import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth"
 import { useAccount } from "wagmi"
@@ -81,6 +82,7 @@ const Farms: NextPage = () => {
                         </div>
                     </div>
                 </WinBox>
+
 
 
 

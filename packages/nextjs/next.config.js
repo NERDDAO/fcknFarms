@@ -1,5 +1,10 @@
 // @ts-check
-
+const withTM = require('next-transpile-modules')([
+    'react-winbox',
+]);
+module.exports = withTM({
+    // additional webpack configurations
+});
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
