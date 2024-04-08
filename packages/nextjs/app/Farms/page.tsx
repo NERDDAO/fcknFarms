@@ -16,6 +16,7 @@ import FarmApprove from "~~/components/nerdOS/farmApprove";
 import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth"
 import { useAccount } from "wagmi"
 import { ethers } from "ethers";
+import FarmEarnings from "./FarmEarnings";
 
 const Farms: NextPage = () => {
     const maxAmount = ethers.MaxUint256;
@@ -36,7 +37,7 @@ const Farms: NextPage = () => {
     };
 
     // Render function for Prismic headless CMS pages
-    function Content() {
+    function Content(this: any) {
         const [modalIsOpen, setModalIsOpen] = React.useState(true);
         const [videoUrl, setVideoUrl] = React.useState("https://www.youtube.com/watch?v=rPjez8z61rI");
         let videoCode;
@@ -366,6 +367,7 @@ const Farms: NextPage = () => {
                         <Tippy className="relative" content={<span>$FCKN  🍗 TOGGLE</span>}>
                             <button className="bg-[url(/noChicken.png)] bg-contain bg-no-repeat h-[75px] w-[75px]" onClick={() => { setIsUnstake(true) }} />
                         </Tippy>
+                        <FarmEarnings />
 
                     </>
                 case "withdraw":
