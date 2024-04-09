@@ -15,6 +15,7 @@ type HeaderMenuLink = {
 };
 
 export const menuLinks: HeaderMenuLink[] = [
+
   {
     label: "Home",
     href: "https://fckn.club/",
