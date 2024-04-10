@@ -209,7 +209,7 @@ const Farms: NextPage = () => {
                             Earned: {(Number(earned.data) * 1e-18).toFixed(3)} $FCKN 🍗 🍗<br />
 
 
-                            <a className="text-xs text-blue-500" href={`https://basescan.org/token/${currentFarm.address}`} target="_blank">View in BaseScan</a>
+                            <a className="text-xs text-blue-500" href={`https://basescan.org/token/${currentFarm.pool}`} target="_blank">View in BaseScan</a>
                             {Number(stakedBalance.data) !== 0 &&
                                 <Tippy className="relative" content={<span>Claim $FCKN 🍗 Tokens</span>}>
                                     <button className="color-blue-500 border-e-rose-200 border-2 bg-[url(/liquidity.png)] bg-contain bg-no-repeat h-[75px] w-[50px]" onClick={() => { claim.write() }} />
